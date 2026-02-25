@@ -8,7 +8,7 @@ node_modules/
 newman/
 
 #Local environment files
-week2/Week2-HA/groq.postman_environment_local.json
+postman-collection/groq.postman_environment_local.json
 
 # Build outputs
 dist/
