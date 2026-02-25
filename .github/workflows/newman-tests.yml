@@ -46,6 +46,7 @@ jobs:
             --verbose \
             -r htmlextra \
             --reporter-htmlextra-export "./gh-pages/api/index.html" \
+            --reporter-htmlextra-title "Groq LLM API Test Report" \
             --reporter-htmlextra-skipEnvironmentVars GROQ_API_KEY \
             --reporter-htmlextra-skipHeaders Authorization \
             --reporter-htmlextra-displayProgressBar

@@ -7,6 +7,7 @@ An automated API testing suite for validating Groq AI endpoints using Postman co
 ## Table of Contents
 
 - [Overview](#overview)
+- [Models Tested](#models-tested)
 - [Project Structure](#project-structure)
 - [Test Coverage](#test-coverage)
 - [Prerequisites](#prerequisites)
@@ -15,7 +16,6 @@ An automated API testing suite for validating Groq AI endpoints using Postman co
 - [Running Tests](#running-tests)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Reports](#reports)
-- [Models Tested](#models-tested)
 
 ---
 
@@ -31,6 +31,19 @@ This project tests the [Groq API](https://console.groq.com/) (OpenAI-compatible)
 | **Image OCR & Translation** | Text extraction and translation from images |
 
 Tests run on a scheduled CI/CD pipeline every 8 hours and on every push/PR to `main`, with HTML reports generated automatically.
+
+---
+
+## Models Tested
+
+| Model | Provider | Type | Use Case |
+|-------|----------|------|----------|
+| `openai/gpt-oss-120b` | OpenAI (via Groq) | Text | Code generation, Translation |
+| `qwen/qwen3-32b` | Alibaba | Text | Code generation |
+| `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Multi-modal (Text + Vision) | Code generation, Translation |
+| `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Text | Code generation |
+| `whisper-large-v3` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
+| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
 
 ---
 
@@ -239,7 +252,8 @@ HTML reports are generated using [newman-reporter-htmlextra](https://github.com/
 - Progress bar display
 - Sensitive data masking — API keys and `Authorization` headers are redacted from reports
 
-> **Security best practice:** The Newman HTML report is published publicly via GitHub Pages. To prevent credential exposure, the `GROQ_API_KEY` environment variable and the `Authorization` request header are explicitly suppressed from all report output using `--reporter-htmlextra-skipEnvironmentVars` and `--reporter-htmlextra-skipHeaders` flags. This means the live report shows full request/response details without ever leaking the API key — even in the raw request headers section.
+> **Security best practice:**
+The Newman HTML report is published publicly via GitHub Pages. To prevent credential exposure, the `GROQ_API_KEY` environment variable and the `Authorization` request header are explicitly suppressed from all report output using `--reporter-htmlextra-skipEnvironmentVars` and `--reporter-htmlextra-skipHeaders` flags. This means the live report shows full request/response details without ever leaking the API key — even in the raw request headers section.
 
 **In CI/CD:** Reports are published to GitHub Pages after every run on `main` and accessible at:
 
@@ -258,19 +272,6 @@ Newman run → ./gh-pages/api/index.html
 ```
 
 **Local reports:** Saved to `./newman-reports/` (excluded from version control).
-
----
-
-## Models Tested
-
-| Model | Provider | Type | Use Case |
-|-------|----------|------|----------|
-| `openai/gpt-oss-120b` | OpenAI (via Groq) | Text | Code generation, Translation |
-| `qwen/qwen3-32b` | Alibaba | Text | Code generation |
-| `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Multi-modal (Text + Vision) | Code generation, Translation |
-| `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Text | Code generation |
-| `whisper-large-v3` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
-| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
 
 ---
 
