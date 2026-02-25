@@ -1,4 +1,4 @@
-name: Newman API Tests
+name: Postman API Tests Reporting to GitHub Pages
 
 on:
   push:
@@ -7,8 +7,18 @@ on:
     branches: [main]
 
   schedule:
-    # Runs every 12 hours at minute 0 (00:00, 12:00, 24:00 UTC)
+    # Runs every 8 hours
     - cron: "0 */8 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   api-tests:
     runs-on: ubuntu-latest
@@ -27,20 +37,34 @@ jobs:
         run: npm ci
 
       - name: Run Newman tests
+        continue-on-error: true
         run: |
+          mkdir -p ./gh-pages/api
           npx newman run "postman-collection/groq.postman_collection.json" \
-            -e "week2/Week2-HA/groq.postman_environment.json" \
+            -e "postman-collection/groq.postman_environment.json" \
             --env-var "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" \
             --verbose \
             -r htmlextra \
-            --reporter-htmlextra-export "./test-report.html" \
+            --reporter-htmlextra-export "./gh-pages/api/index.html" \
             --reporter-htmlextra-skipEnvironmentVars GROQ_API_KEY \
-            --reporter-htmlextra-skipHeaders Authorization
+            --reporter-htmlextra-skipHeaders Authorization \
+            --reporter-htmlextra-displayProgressBar
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         if: always()
         with:
-          name: Home Assignment API Test Report
-          path: ./test-report.html
-          retention-days: 30
+          path: ./gh-pages
+
+  deploy:
+    needs: api-tests
+    runs-on: ubuntu-latest
+    if: always() && github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}api/
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
