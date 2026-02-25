@@ -108,6 +108,10 @@ Tests vision models for multilingual text extraction from images with retry logi
 | HA4 - S09 | Image URL |
 | HA4 - S10 | Base64 encoded image |
 
+**Source image used for OCR & Translation:**
+
+![OCR Source Image](https://m.media-amazon.com/images/I/71+-mzc93rL._SX3000_.jpg)
+
 **Features:**
 - Exponential backoff retry (max 3 retries: 1s → 2s → 4s delay)
 - Automatic retry on 5xx errors using collection variables
@@ -213,6 +217,16 @@ The GitHub Actions workflow ([.github/workflows/newman-tests.yml](.github/workfl
 4. Run Newman tests with HTML reporter
 5. Upload `test-report.html` as a build artifact (retained 30 days)
 
+### GitHub Pages Setup
+
+Before the deployment step can succeed, GitHub Pages must be enabled in the repository settings:
+
+1. Navigate to **[Settings → Pages](https://github.com/asvignesh-qae/groq-api-testing-postman-newman/settings/pages)**
+2. Under **"Build and deployment"**, set the **Source** to **"GitHub Actions"**
+3. Save — the next workflow run on `main` will deploy successfully
+
+> Without this step, the `deploy-pages` action returns a 404 error and the deployment fails.
+
 ---
 
 ## Reports
@@ -247,14 +261,14 @@ Newman run → ./gh-pages/api/index.html
 
 ## Models Tested
 
-| Model | Provider | Use Case |
-|-------|----------|----------|
-| `openai/gpt-oss-120b` | OpenAI (via Groq) | Code generation, Translation |
-| `qwen/qwen3-32b` | Alibaba | Code generation |
-| `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Code generation, Translation |
-| `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Code generation |
-| `whisper-large-v3` | OpenAI (via Groq) | Audio transcription |
-| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio transcription |
+| Model | Provider | Type | Use Case |
+|-------|----------|------|----------|
+| `openai/gpt-oss-120b` | OpenAI (via Groq) | Text | Code generation, Translation |
+| `qwen/qwen3-32b` | Alibaba | Text | Code generation |
+| `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Multi-modal (Text + Vision) | Code generation, Translation |
+| `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Text | Code generation |
+| `whisper-large-v3` | OpenAI (via Groq) | Audio | Audio transcription |
+| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio | Audio transcription |
 
 ---
 
