@@ -1,0 +1,46 @@
+name: Newman API Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  schedule:
+    # Runs every 12 hours at minute 0 (00:00, 12:00, 24:00 UTC)
+    - cron: "0 */8 * * *"
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Newman tests
+        run: |
+          npx newman run "postman-collection/groq.postman_collection.json" \
+            -e "week2/Week2-HA/groq.postman_environment.json" \
+            --env-var "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" \
+            --verbose \
+            -r htmlextra \
+            --reporter-htmlextra-export "./test-report.html" \
+            --reporter-htmlextra-skipEnvironmentVars GROQ_API_KEY \
+            --reporter-htmlextra-skipHeaders Authorization
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Home Assignment API Test Report
+          path: ./test-report.html
+          retention-days: 30
