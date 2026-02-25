@@ -59,12 +59,12 @@ The Postman collection **Gen AI - HA - Postman Collection** contains 15 requests
 ### HA1 — LLM Code Generation (4 requests)
 Tests code generation from a web page DOM using different models at `temperature: 0.1`.
 
-| Request | Model |
-|---------|-------|
-| HA1 - S17 | `openai/gpt-oss-120b` |
-| HA1 - S17 | `qwen/qwen3-32b` |
-| HA1 - S17 | `meta-llama/llama-4-scout-17b-16e-instruct` |
-| HA1 - S17 | `moonshotai/kimi-k2-instruct-0905` |
+| Request | Model | Type |
+|---------|-------|------|
+| HA1 - S17 | `openai/gpt-oss-120b` | Text |
+| HA1 - S17 | `qwen/qwen3-32b` | Text |
+| HA1 - S17 | `meta-llama/llama-4-scout-17b-16e-instruct` | Multi-modal (Text + Vision) |
+| HA1 - S17 | `moonshotai/kimi-k2-instruct-0905` | Text |
 
 **Endpoint:** `POST https://api.groq.com/openai/v1/chat/completions`
 **Assertions:** HTTP 200, response body validated against `groqResponseSchema` (stored in Postman environment)
@@ -74,14 +74,14 @@ Tests code generation from a web page DOM using different models at `temperature
 ### HA2 — Multilingual Translation (6 requests)
 Tests translation of QA test steps into three languages using `top_p: 0.1`.
 
-| Request | Language | Model |
-|---------|----------|-------|
-| HA2 - S21 | Tamil | `openai/gpt-oss-120b` |
-| HA2 - S21 | Tamil | `meta-llama/llama-4-scout-17b-16e-instruct` |
-| HA2 - S21 | Japanese | `openai/gpt-oss-120b` |
-| HA2 - S21 | Japanese | `meta-llama/llama-4-scout-17b-16e-instruct` |
-| HA2 - S21 | German | `openai/gpt-oss-120b` |
-| HA2 - S21 | German | `meta-llama/llama-4-scout-17b-16e-instruct` |
+| Request | Language | Model | Type |
+|---------|----------|-------|------|
+| HA2 - S21 | Tamil | `openai/gpt-oss-120b` | Text |
+| HA2 - S21 | Tamil | `meta-llama/llama-4-scout-17b-16e-instruct` | Multi-modal (Text + Vision) |
+| HA2 - S21 | Japanese | `openai/gpt-oss-120b` | Text |
+| HA2 - S21 | Japanese | `meta-llama/llama-4-scout-17b-16e-instruct` | Multi-modal (Text + Vision) |
+| HA2 - S21 | German | `openai/gpt-oss-120b` | Text |
+| HA2 - S21 | German | `meta-llama/llama-4-scout-17b-16e-instruct` | Multi-modal (Text + Vision) |
 
 **Assertions:** HTTP 200, JSON schema validation, language-specific keyword checks (e.g. `திறக்கவும்`, `入力し`, `die Anwendung`)
 
@@ -90,10 +90,10 @@ Tests translation of QA test steps into three languages using `top_p: 0.1`.
 ### HA3 — Audio Transcription (2 requests)
 Tests Whisper models on an `.m4a` audio file using `multipart/form-data`.
 
-| Request | Model |
-|---------|-------|
-| HA3 - S16 | `whisper-large-v3` |
-| HA3 - S16 | `whisper-large-v3-turbo` |
+| Request | Model | Type |
+|---------|-------|------|
+| HA3 - S16 | `whisper-large-v3` | Audio (Speech-to-Text) |
+| HA3 - S16 | `whisper-large-v3-turbo` | Audio (Speech-to-Text) |
 
 **Endpoint:** `POST https://api.groq.com/openai/v1/audio/transcriptions`
 **Assertions:** HTTP 200, JSON schema validation, content contains `"QA Automation"`
@@ -239,6 +239,8 @@ HTML reports are generated using [newman-reporter-htmlextra](https://github.com/
 - Progress bar display
 - Sensitive data masking — API keys and `Authorization` headers are redacted from reports
 
+> **Security best practice:** The Newman HTML report is published publicly via GitHub Pages. To prevent credential exposure, the `GROQ_API_KEY` environment variable and the `Authorization` request header are explicitly suppressed from all report output using `--reporter-htmlextra-skipEnvironmentVars` and `--reporter-htmlextra-skipHeaders` flags. This means the live report shows full request/response details without ever leaking the API key — even in the raw request headers section.
+
 **In CI/CD:** Reports are published to GitHub Pages after every run on `main` and accessible at:
 
 ```
@@ -267,8 +269,8 @@ Newman run → ./gh-pages/api/index.html
 | `qwen/qwen3-32b` | Alibaba | Text | Code generation |
 | `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Multi-modal (Text + Vision) | Code generation, Translation |
 | `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Text | Code generation |
-| `whisper-large-v3` | OpenAI (via Groq) | Audio | Audio transcription |
-| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio | Audio transcription |
+| `whisper-large-v3` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
+| `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
 
 ---
 
