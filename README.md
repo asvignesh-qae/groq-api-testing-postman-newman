@@ -30,7 +30,7 @@ This project tests the [Groq API](https://console.groq.com/) (OpenAI-compatible)
 | **Audio Transcription** | Speech-to-text using Whisper models |
 | **Image OCR & Translation** | Text extraction and translation from images |
 
-Tests run on a scheduled CI/CD pipeline every 8 hours and on every push/PR to `main`, with HTML reports generated automatically.
+Tests run on a scheduled CI/CD pipeline once a week and on every push/PR to `main`, with HTML reports generated automatically.
 
 ---
 
@@ -219,7 +219,7 @@ The GitHub Actions workflow ([.github/workflows/newman-tests.yml](.github/workfl
 |---------|------|
 | `push` | On every push to `main` |
 | `pull_request` | On every PR targeting `main` |
-| `schedule` | Every 8 hours (`0 */8 * * *`) |
+| `schedule` | Once a week, Mondays at 06:00 UTC (`0 6 * * 1`) |
 
 **Workflow steps:**
 1. Checkout repository
