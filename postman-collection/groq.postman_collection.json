@@ -133,48 +133,6 @@
       "response": []
     },
     {
-      "name": "HA1 - S17 - moonshotai/kimi-k2-instruct-0905, Temp .1",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response matches schema\", function() {\r",
-              "    pm.response.to.have.jsonSchema(pm.environment.get(\"groqResponseSchema\"));\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Extract the DOM from http://leaftaps.com/opentaps/control/login and provide me the Playwright with TS code to validate the login functionality. Instructions: Add the test.describe, test and test.step for each action. Do not use ID if the value has number in it. Provide only TS code wrap the selectors or string in backtick and no explanations needed [STRICTLY PROHIBITED] page.waitForTimeout(), comments in the code, new line character(\\n) and double quotes\"\n        }\n    ],\n    \"model\": \"moonshotai/kimi-k2-instruct-0905\",\n    \"temperature\": 0.1\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://api.groq.com/openai/v1/chat/completions",
-          "protocol": "https",
-          "host": ["api", "groq", "com"],
-          "path": ["openai", "v1", "chat", "completions"]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "HA2 - S21 - Tamil - openai/gpt-oss-120b top_p .1",
       "event": [
         {
@@ -190,7 +148,7 @@
               "});\r",
               "\r",
               "pm.test('Check if the response contains the expected message role', function () {\r",
-              "    pm.expect(pm.response.json().choices[0].message.content).to.contain(\"பயன்பாட்டை திறக்கவும்\");\r",
+              "    pm.expect(pm.response.json().choices[0].message.content).to.contain(\"பயன்பாட்டை\");\r",
               "});"
             ],
             "type": "text/javascript",

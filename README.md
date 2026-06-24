@@ -41,7 +41,6 @@ Tests run on a scheduled CI/CD pipeline every 8 hours and on every push/PR to `m
 | `openai/gpt-oss-120b` | OpenAI (via Groq) | Text | Code generation, Translation |
 | `qwen/qwen3-32b` | Alibaba | Text | Code generation |
 | `meta-llama/llama-4-scout-17b-16e-instruct` | Meta | Multi-modal (Text + Vision) | Code generation, Translation |
-| `moonshotai/kimi-k2-instruct-0905` | Moonshot AI | Text | Code generation |
 | `whisper-large-v3` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
 | `whisper-large-v3-turbo` | OpenAI (via Groq) | Audio (Speech-to-Text) | Audio transcription |
 
@@ -77,7 +76,6 @@ Tests code generation from a web page DOM using different models at `temperature
 | HA1 - S17 | `openai/gpt-oss-120b` | Text |
 | HA1 - S17 | `qwen/qwen3-32b` | Text |
 | HA1 - S17 | `meta-llama/llama-4-scout-17b-16e-instruct` | Multi-modal (Text + Vision) |
-| HA1 - S17 | `moonshotai/kimi-k2-instruct-0905` | Text |
 
 **Endpoint:** `POST https://api.groq.com/openai/v1/chat/completions`
 **Assertions:** HTTP 200, response body validated against `groqResponseSchema` (stored in Postman environment)
